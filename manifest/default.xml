@@ -5,11 +5,12 @@
         name="github"
         fetch="git@github.com:iqivi/" />
 
+    <!-- Domyślny branch dla wszystkich repo -->
     <default
         remote="github"
         revision="main" />
 
-    <!-- Repo root (__ci__) -->
+    <!-- CI -->
     <project
         name="learnnow-ci"
         path="ci" />
@@ -29,9 +30,10 @@
         name="learnnow-db"
         path="db" />
 
-    <!-- Infrastructure (nginx + compose) -->
+    <!-- Infrastructure (nginx + compose) — branch: server -->
     <project
         name="learnnow-infra"
-        path="infra" />
+        path="infra"
+        revision="server" />
 
 </manifest>
