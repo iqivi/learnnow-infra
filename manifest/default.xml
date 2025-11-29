@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+
+    <remote
+        name="github"
+        fetch="git@github.com:iqivi/" />
+
+    <default
+        remote="github"
+        revision="main" />
+
+    <!-- Repo root (__ci__) -->
+    <project
+        name="learnnow-ci"
+        path="ci" />
+
+    <!-- Frontend -->
+    <project
+        name="learnnow-webapp"
+        path="web-app" />
+
+    <!-- Backend -->
+    <project
+        name="learnnow-backend"
+        path="backend" />
+
+    <!-- DB -->
+    <project
+        name="learnnow-db"
+        path="db" />
+
+    <!-- Infrastructure (nginx + compose) -->
+    <project
+        name="learnnow-infra"
+        path="infra" />
+
+</manifest>

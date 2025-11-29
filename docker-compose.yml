@@ -1,0 +1,91 @@
+version: '3.9'
+
+services:
+
+  # ============================================
+  # 1) NGINX REVERSE PROXY
+  # ============================================
+  nginx:
+    image: nginx:1.25.3-alpine
+    container_name: nginx
+    volumes:
+      - ./nginx/conf/devops.conf:/etc/nginx/conf.d/default.conf
+
+      # certbot
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+
+      # auth (opcjonalne — stwórz folder!)
+      - ./nginx/auth/.htpasswd:/etc/nginx/auth/.htpasswd:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    depends_on:
+      - jenkins
+      - frontend
+      - backend
+
+  # ============================================
+  # 2) JENKINS
+  # ============================================
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: ci_jenkins
+    privileged: true
+    user: root
+    environment:
+      - JENKINS_OPTS=$JENKINS_OPTS
+    volumes:
+      - ./jenkins/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ..:/workspace        # <-- cały projekt dostępny w Jenkinsie
+    restart: always
+
+  # ============================================
+  # 3) FRONTEND (React → Nginx build)
+  # ============================================
+  frontend:
+    build:
+      context: ../web-app
+      dockerfile: Dockerfile
+    container_name: main_frontend
+    volumes:
+      - ../web-app/nginx/conf/react.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: always
+
+  # ============================================
+  # 4) CERTBOT
+  # ============================================
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot \
+             --force-renewal \
+             -d learnnow.ovh \
+             -d jenkins.learnnow.ovh \
+             --email igor96mail@gmail.com \
+             --rsa-key-size 4096 \
+             --agree-tos \
+             --noninteractive
+
+  # ============================================
+  # 5) BACKEND (Spring Boot)
+  # ============================================
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: spring_backend
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8081:8080"
+    restart: always
+
+networks:
+  default:
+    driver: bridge
