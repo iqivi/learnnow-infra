@@ -32,6 +32,7 @@
     <!-- Infrastructure (nginx + compose) -->
     <project
         name="learnnow-infra"
-        path="infra" />
+        path="infra" 
+        revision="dev"/>
 
 </manifest>
