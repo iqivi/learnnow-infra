@@ -63,15 +63,37 @@ services:
     volumes:
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
-    # KLUCZOWA POPRAWKA: Całe polecenie zapisane jako jeden ciąg znaków.
-    command: certonly --webroot -w /var/www/certbot 
-            --force-renewal 
-            -d learnnow.ovh 
-            --email igor96mail@gmail.com 
-            --rsa-key-size 4096 
-            --agree-tos 
-            --noninteractive
+    # Zmieniona komenda, aby zażądać ODDZIELNYCH certyfikatów
+    command: >
+      certonly --webroot -w /var/www/certbot
+      --force-renewal
+      -d learnnow.ovh
+      --cert-name learnnow.ovh
+      -d jenkins.learnnow.ovh
+      --cert-name jenkins.learnnow.ovh
+      --email igor96mail@gmail.com
+      --rsa-key-size 4096
+      --agree-tos
+      --noninteractive
+      --expand # Użyteczne, gdybyś chciał mieć te domeny razem w przyszłości
 
+  # ============================================
+  # 6) MYSQL DATABASE
+  # ============================================
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass
+    ports:
+      - "3306:3306"
+    volumes:
+      - ../db:/var/lib/mysql
+    restart: always
+    
   # ============================================
   # 5) BACKEND (Spring Boot)
   # ============================================
