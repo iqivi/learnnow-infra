@@ -17,14 +17,10 @@ services:
     build:
       context: ../backend
     container_name: dev_backend
-    ports:
-      - "8080:8080"
     restart: unless-stopped
 
   frontend:
     build:
       context: ../web-app
     container_name: dev_frontend
-    ports:
-      - "3000:80"
     restart: unless-stopped
