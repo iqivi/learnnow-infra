@@ -24,3 +24,20 @@ services:
       context: ../web-app
     container_name: dev_frontend
     restart: unless-stopped
+
+  # ============================================
+  # 6) MYSQL DATABASE
+  # ============================================
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass
+    ports:
+      - "3306:3306"
+    volumes:
+      - ../db:/var/lib/mysql
+    restart: always
