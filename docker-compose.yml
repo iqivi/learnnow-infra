@@ -75,7 +75,7 @@ services:
       --rsa-key-size 4096
       --agree-tos
       --noninteractive
-      --expand # Użyteczne, gdybyś chciał mieć te domeny razem w przyszłości
+      --expand
 
   # ============================================
   # 6) MYSQL DATABASE
@@ -88,10 +88,9 @@ services:
       MYSQL_DATABASE: appdb
       MYSQL_USER: appuser
       MYSQL_PASSWORD: apppass
-    ports:
-      - "3306:3306"
     volumes:
-      - ../db:/var/lib/mysql
+      - mysql_prod_data:/var/lib/mysql
+      - ../db/init:/docker-entrypoint-initdb.d
     restart: always
     
   # ============================================
