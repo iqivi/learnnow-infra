@@ -107,6 +107,9 @@ services:
       - "8081:8080"
     restart: always
 
+volumes:
+  mysql_prod_data:
+
 networks:
   default:
     driver: bridge
