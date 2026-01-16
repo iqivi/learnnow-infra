@@ -106,6 +106,7 @@ services:
     depends_on:
       - mysql
     environment:
+      - SPRING_PROFILES_ACTIVE=prod
       - DB_HOST=mysql
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
