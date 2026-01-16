@@ -51,7 +51,7 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_API_URL: "https://learnnow.ovh/api"
-    container_name: main_frontend
+    container_name: frontend
     volumes:
       - ../web-app/nginx/conf/react.conf:/etc/nginx/conf.d/default.conf:ro
     restart: always
@@ -84,7 +84,7 @@ services:
   # ============================================
   mysql:
     image: mysql:8.0
-    container_name: mysql_db
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
@@ -102,7 +102,9 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
-    container_name: spring_backend
+    container_name: backend
+    depends_on:
+      - mysql
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - DB_HOST=mysql
