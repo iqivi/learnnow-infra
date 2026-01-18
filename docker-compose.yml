@@ -115,8 +115,8 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - MAIL_USERNAME=${MAIL_USERNAME}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
-      - APP_BACKEND_LINK=https://learnnow.ovh/
-      - APP_FRONTEND_LINK=https://learnnow.ovh/
+      - APP_BACKEND_LINK=${APP_BACKEND_LINK}
+      - APP_FRONTEND_LINK=${APP_FRONTEND_LINK}
     ports:
       - "8081:8080"
     restart: always
