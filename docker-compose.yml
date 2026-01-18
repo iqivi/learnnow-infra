@@ -123,6 +123,20 @@ services:
       - "8081:8080"
     restart: always
 
+  # ============================================
+  # 6) BACKEND TESTS (Development only)
+  # ============================================
+  backend-test:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.test
+    container_name: backend-test
+    environment:
+      - MAVEN_OPTS=-Xmx512m
+    command: mvn test
+    profiles:
+      - test
+
 volumes:
   mysql_prod_data:
 
